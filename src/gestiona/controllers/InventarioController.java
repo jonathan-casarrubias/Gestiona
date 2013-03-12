@@ -17,7 +17,7 @@ import java.util.logging.Logger;
 public class InventarioController implements ControllerInterface {
 
     @Override
-    public void init() throws InstantiationException, IllegalAccessException, ClassNotFoundException {
+    public void init(){
         
         HashMap 
                 

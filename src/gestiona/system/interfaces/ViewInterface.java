@@ -11,6 +11,6 @@ import javax.swing.JPanel;
  */
 public interface ViewInterface {
     
-    public JPanel init() throws InstantiationException, IllegalAccessException, ClassNotFoundException;
+    public JPanel init();
     
 }

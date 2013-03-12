@@ -23,7 +23,7 @@ import java.util.logging.Logger;
 public class Menu implements ViewInterface{
     
     @Override
-    public JPanel init() throws InstantiationException, IllegalAccessException, ClassNotFoundException {
+    public JPanel init(){
         throw new UnsupportedOperationException("Not supported yet.");
     }
    /**
@@ -52,28 +52,19 @@ public class Menu implements ViewInterface{
             btn = new JButton(current);
             // Lets set the event listener
             btn.addMouseListener(new MouseAdapter(){
-                public void mouseClicked(MouseEvent e){
-                    
+                public void mouseClicked(MouseEvent e){                    
                     BorderLayout layout = (BorderLayout) view.getLayout();
                     view.remove(layout.getLayoutComponent(BorderLayout.CENTER));
                                       
-                    JPanel subpanel;
-                    
-                    try {
-                        
-                        subpanel = gestiona.system.core.Load.view(linkto,false);
+                    JPanel 
+                            
+                    subpanel;
+                    subpanel = gestiona.system.core.Load.view(linkto,false);
                
-                        view.add(subpanel,BorderLayout.CENTER);
-                        view.revalidate(); 
-                        view.repaint();
-                        
-                    } catch (InstantiationException ex) {
-                        Logger.getLogger(Menu.class.getName()).log(Level.SEVERE, null, ex);
-                    } catch (IllegalAccessException ex) {
-                        Logger.getLogger(Menu.class.getName()).log(Level.SEVERE, null, ex);
-                    } catch (ClassNotFoundException ex) {
-                        Logger.getLogger(Menu.class.getName()).log(Level.SEVERE, null, ex);
-                    }                                          
+                    view.add(subpanel,BorderLayout.CENTER);
+                    view.revalidate(); 
+                    view.repaint();                        
+                                                        
                 }
             });
             

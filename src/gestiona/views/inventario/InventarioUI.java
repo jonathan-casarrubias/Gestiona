@@ -30,7 +30,7 @@ public class InventarioUI implements ViewInterface {
     * Crea el menu a la izquierda y manda llamar 
     **/
     @Override
-    public JPanel init() throws InstantiationException, IllegalAccessException, ClassNotFoundException{
+    public JPanel init(){
         
         // Lets first create our JPanel
         inventarioPanel = new JPanel(new BorderLayout());

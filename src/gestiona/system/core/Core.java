@@ -21,7 +21,7 @@ public class Core {
     * 
     * Metodo el cual nos sirve como constructor 
     **/
-    public static void init() throws InstantiationException, IllegalAccessException {                       
+    public static void init(){                       
         // Ahora creamos la ventana principal de nuestra aplicación   
         Core.MAIN_WINDOW = new JFrame(gestiona.config.Settings.SOFTWARE_NAME+" - "+gestiona.config.Settings.SOFTWARE_DESCRIPTION);
         Core.MAIN_WINDOW.setSize(800,400);        
