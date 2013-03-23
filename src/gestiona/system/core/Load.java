@@ -86,7 +86,8 @@ public class Load {
        
         if(VIEWS_CONTAINER.containsKey(viewName)){
             System.out.print(gestiona.config.Settings.SOFTWARE_NAME+": Cargando vista '"+viewName+"' desde cache\n");
-            instancia = (ViewInterface) VIEWS_CONTAINER.get(viewName);                  
+            instancia = (ViewInterface) VIEWS_CONTAINER.get(viewName);
+            CURRENT_VIEW = (JPanel) instancia.init();
         }else{
             System.out.print(gestiona.config.Settings.SOFTWARE_NAME+": Cargando vista '"+viewName+"' por primera vez\n");
             Class aClass;
