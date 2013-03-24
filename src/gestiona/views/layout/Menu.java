@@ -13,8 +13,21 @@ import java.awt.event.MouseEvent;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 import java.awt.GridBagConstraints;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
+import java.awt.event.KeyEvent;
+import java.io.File;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JFileChooser;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
+import javax.swing.JSeparator;
+import javax.swing.SwingConstants;
 /**
  * @author Jonathan Casarrubias
  * 
@@ -72,5 +85,55 @@ public class Menu implements ViewInterface{
         }
         
         return left;
+    }
+    
+    
+    public static JMenuBar top(){
+        
+        JMenuBar bar = new JMenuBar();        
+
+        JMenu menuArchivo = new javax.swing.JMenu();
+        menuArchivo.setText("Archivo");
+        menuArchivo.setMnemonic(KeyEvent.VK_A);
+        bar.add(menuArchivo);
+        
+        JMenuItem abrirItem = new javax.swing.JMenuItem("Abrir", KeyEvent.VK_B);
+        menuArchivo.add(abrirItem);
+        
+        JMenuItem salirItem = new javax.swing.JMenuItem("Salir", KeyEvent.VK_S);
+        
+        menuArchivo.add(new JSeparator(SwingConstants.HORIZONTAL));
+        menuArchivo.add(salirItem);
+        
+        abrirItem.addActionListener( new ActionListener() {
+            private Object ObjectvalorElegido;
+              @Override
+              public void actionPerformed(ActionEvent event) {  
+                    JFileChooser fc= new JFileChooser();
+                    fc.showOpenDialog(null);
+                    File file = fc.getSelectedFile();
+                    Object[] valores = { "Inventario", "Articulo", "Cotización" };
+                    ObjectvalorElegido = JOptionPane.showInputDialog(null,"Elige tipo de archivo", "Abrir archivo",
+                    JOptionPane.INFORMATION_MESSAGE, null,valores, valores[0]);     
+                    JOptionPane.showMessageDialog(null, "Este archivo no parece ser del tipo correcto", "Cuidado",
+                    JOptionPane.WARNING_MESSAGE);
+                    JOptionPane.showMessageDialog(null, "Oops lo siento, no puedo continuar!", "Error",
+                    JOptionPane.ERROR_MESSAGE);
+              }
+        });  
+        
+        salirItem.addActionListener( new ActionListener() {
+              @Override
+              public void actionPerformed(ActionEvent event) {  
+                  if(JOptionPane.YES_OPTION == JOptionPane.showConfirmDialog(null,"Estas seguro que deseas salir?")){
+                     System.exit(0);    
+                  }                  
+              }
+        });        
+        
+
+        
+        return bar;     
+        
     }
 }
