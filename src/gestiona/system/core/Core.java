@@ -1,6 +1,7 @@
 package gestiona.system.core;
 // Carguemos las librerias necesarias
 import java.awt.BorderLayout;
+import java.awt.Frame;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.util.HashMap;
@@ -25,6 +26,7 @@ public class Core {
         // Ahora creamos la ventana principal de nuestra aplicación   
         Core.MAIN_WINDOW = new JFrame(gestiona.config.Settings.SOFTWARE_NAME+" - "+gestiona.config.Settings.SOFTWARE_DESCRIPTION);
         Core.MAIN_WINDOW.setSize(800,400);        
+        Core.MAIN_WINDOW.setExtendedState(Frame.MAXIMIZED_BOTH);
         Core.MAIN_WINDOW.addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e){

@@ -1,11 +1,18 @@
 package gestiona.views.inventario;
 // importemos nuestras librerias
 import gestiona.system.interfaces.ViewInterface;
+import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.JSpinner;
+
 /**
  * @author Jonathan Casarrubias
  * 
@@ -14,12 +21,13 @@ import javax.swing.*;
 public class ArticulosUI implements ViewInterface{
 
     // Creamos las etiquetas requeridas para esta vista.
-    private JLabel articuloTitle      = new JLabel("Articulo: ",JLabel.TRAILING),
-                   almacenTitle       = new JLabel("Almacen: ",JLabel.TRAILING),
-                   monedaTitle        = new JLabel("Moneda: ",JLabel.TRAILING),
-                   precioTitle        = new JLabel("Precio: ",JLabel.TRAILING),
-                   cantidadTitle      = new JLabel("Cantidad: ",JLabel.TRAILING),
-                   observacionesTitle = new JLabel("Observaciones: ",JLabel.TRAILING);
+    private JLabel articuloLabel      = new JLabel("Articulo: ",JLabel.TRAILING),
+                   almacenLabel       = new JLabel("Almacen: ",JLabel.TRAILING),
+                   monedaLabel        = new JLabel("Moneda: ",JLabel.TRAILING),
+                   precioLabel        = new JLabel("Precio: ",JLabel.TRAILING),
+                   cantidadLabel      = new JLabel("Cantidad: ",JLabel.TRAILING),
+                   spinnerLabel       = new JLabel("Proveedor: ",JLabel.TRAILING),
+                   observacionesLabel = new JLabel("Observaciones: ",JLabel.TRAILING);
     
     // Ahora debemos crear los campos de texto y listas necesarias.
     private JTextField articuloField = new JTextField(40),
@@ -34,13 +42,125 @@ public class ArticulosUI implements ViewInterface{
         "MX",
         "USD"
     });
+    // Ahora creamos el boton de guardar
+    private JButton guardarBtn = new JButton("Guardar");
+    
+    // Creamos el objeto que va a contener nuestros articulos
+    Object[][] articulos;
+    
+    // Creamos el modelo para nuestra tabla
+    DefaultTableModel model;
+    
+    // Creamos el campo de texto para nuestras observaciones
     private JTextArea observacionesField = new JTextArea();
+    
+    // Ahora creamos un text area para la ayuda
+    private JTextArea helpText = new JTextArea("\nPara crear un nuevo articulo. \n\n Llena el formulario y posteriormente\n presione el botón de guardar. \n\n Recuerda que el campo de \n observaciones es opcional, el resto\n de los campos del formulario son\n obligatorios. \n\n Cuando guardes un nuevo articulo,\n automaticamente aparecerá en\n la tabla inferior.");
+    
+    // Por ultimo creamos un spinner para nuestros proveedores
+    private JSpinner spinnerField = new JSpinner();
+    
+
    /**
     * @method init
     * Es hora de iniciar con la carga de la vista
     **/
     @Override
     public JPanel init(){
+        
+        
+        JPanel
+                
+        articulos = new JPanel();
+        articulos.setBackground(Color.decode(gestiona.config.Settings.BACKGROUND_COLOR));
+        articulos.setLayout(new BorderLayout());
+        
+        articulos.add(this.createForm(),BorderLayout.CENTER);
+        
+        helpText.setMargin(new Insets(10,10,10,10)); 
+        helpText.setBackground(Color.decode("#eeeeee"));
+        articulos.add(helpText,BorderLayout.LINE_END);
+        articulos.add(this.createTable(),BorderLayout.SOUTH);      
+        
+        // Creamos un escucha para nuestro botón de guardar
+        guardarBtn.addMouseListener(new MouseAdapter() {
+            
+            @Override
+            public void mouseClicked(MouseEvent e){        
+                
+                // Primero verifiquemos que se haya escrito algún articulo    
+                if(articuloField.getText() == null || articuloField.getText().trim().equals( "" )){
+                    JOptionPane.showMessageDialog(null, "Por favor ingresa un articulo", "Error",
+                    JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
+                
+                // Ahora verifiquemos que se haya escrito alguna cantidad    
+                if(cantidadField.getText() == null || cantidadField.getText().trim().equals( "" ) || !gestiona.system.helpers.Numeric.isInteger(cantidadField.getText(),10)){
+                    JOptionPane.showMessageDialog(null, "Por favor ingresa una cantidad", "Error",
+                    JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
+                
+                // Ahora verifiquemos que se haya escrito algun precio
+                if(precioField.getText() == null || precioField.getText().trim().equals( "" ) || !gestiona.system.helpers.Numeric.isInteger(precioField.getText(),10)){
+                    JOptionPane.showMessageDialog(null, "Por favor ingresa un precio", "Error",
+                    JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
+                                                
+                 model.insertRow(0,new Object[]{
+                     articuloField.getText(),
+                     almacenField.getSelectedItem(),
+                     cantidadField.getText(),
+                     precioField.getText(),
+                     monedaField.getSelectedItem(),
+                     spinnerField.getValue(),
+                     observacionesField.getText()
+                 });
+                                                        
+            }
+            
+        });
+        
+        
+        return articulos;
+        
+    }
+    
+ /**
+    * @method form
+    * Es hora de iniciar con la carga de la vista
+    **/
+    public JScrollPane createTable(){
+    
+        String[] col = {
+            "Articulo",
+            "Almacen",
+            "Cantidad",
+            "Precio",
+            "Moneda",
+            "Proveedor",
+            "Observaciones"
+        };
+        
+        Object[][] data = {};
+        
+        model = new DefaultTableModel(data,col);
+        
+        JTable table = new JTable(model);               
+        JScrollPane pane = new JScrollPane(table);
+                    pane.setPreferredSize(new Dimension(5000,150));
+        
+        return pane;
+    
+    
+    }
+ /**
+    * @method form
+    * Es hora de iniciar con la carga de la vista
+    **/
+    public JPanel createForm(){
         
         GridBagConstraints c = new GridBagConstraints();
         c.fill = GridBagConstraints.HORIZONTAL;
@@ -49,9 +169,9 @@ public class ArticulosUI implements ViewInterface{
         
         JPanel
                 
-        articulos = new JPanel();
-        articulos.setBackground(Color.decode(gestiona.config.Settings.BACKGROUND_COLOR));
-        articulos.setLayout(new GridBagLayout());
+        form = new JPanel();
+        form.setBackground(Color.decode(gestiona.config.Settings.BACKGROUND_COLOR));
+        form.setLayout(new GridBagLayout());
         
         int col_a_gridwith = 1;
         int col_b_gridwith = 4;
@@ -59,61 +179,79 @@ public class ArticulosUI implements ViewInterface{
         c.gridx = 0;
         c.gridy = 0;
         c.gridwidth = col_a_gridwith;
-        articulos.add(articuloTitle,c);
+        form.add(articuloLabel,c);
         c.gridx = 1;
         c.gridy = 0;
         c.gridwidth = col_b_gridwith;
-        articulos.add(articuloField,c);
+        form.add(articuloField,c);
         c.gridx = 0;
         c.gridy = 1;
         c.gridwidth = col_a_gridwith;
-        articulos.add(almacenTitle,c);
+        form.add(almacenLabel,c);
         c.gridx = 1;
         c.gridy = 1;
         c.gridwidth = col_b_gridwith;
-        articulos.add(almacenField,c);
+        form.add(almacenField,c);
         c.gridx = 0;
         c.gridy = 2;
         c.gridwidth = col_a_gridwith;
-        articulos.add(cantidadTitle,c);
+        form.add(cantidadLabel,c);
         c.gridx = 1;
         c.gridy = 2;
         c.gridwidth = col_b_gridwith;
-        articulos.add(cantidadField,c);
+        form.add(cantidadField,c);
         c.gridx = 0;
         c.gridy = 3;
         c.gridwidth = col_a_gridwith;
-        articulos.add(precioTitle,c);
+        form.add(precioLabel,c);
         c.gridx = 1;
         c.gridy = 3;
         c.gridwidth = col_b_gridwith;
-        articulos.add(precioField,c);
+        form.add(precioField,c);
         c.gridx = 0;
         c.gridy = 4;
         c.gridwidth = col_a_gridwith;
-        articulos.add(monedaTitle,c);
+        form.add(monedaLabel,c);
         c.gridx = 1;
         c.gridy = 4;
         c.gridwidth = col_b_gridwith;
-        articulos.add(monedaField,c);
+        form.add(monedaField,c);
         c.gridx = 0;
         c.gridy = 5;
         c.gridwidth = col_a_gridwith;
-        articulos.add(observacionesTitle,c);
+        form.add(spinnerLabel,c);
         c.gridx = 1;
         c.gridy = 5;
-        c.ipady     = 100;
-        c.ipadx     = 500;
+        c.gridwidth = col_b_gridwith;
+        spinnerField.setModel(new javax.swing.SpinnerListModel(new String[] {
+            "Bombas Hidraulicas de Occidente S.A. de C.V.",
+            "Plast Ma - Materiales Plásticos S.A. de C.V.",
+            "Vivero Aguilera", 
+            "Textiles Sinteticos S. de R.L. de C.V", 
+            "Madera Sintetica Prodecks"
+        }));
+        form.add(spinnerField,c);
+        c.gridx = 0;
+        c.gridy = 6;
+        c.gridwidth = col_a_gridwith;
+        form.add(observacionesLabel,c);
+        c.gridx = 1;
+        c.gridy = 6;
+        c.ipady     = 50;
+        c.ipadx     = 800;
         c.gridwidth = col_b_gridwith;        
         observacionesField.setColumns(40);
         observacionesField.setRows(10);
 
-        articulos.add(observacionesField,c);
+        form.add(observacionesField,c);
+        
+        c.gridx = 1;
+        c.gridy = 7;
+        c.gridwidth = col_b_gridwith;
+        form.add(guardarBtn,c);
                 
-        return articulos;
+        return form;
         
     }
-    
- 
     
 }
