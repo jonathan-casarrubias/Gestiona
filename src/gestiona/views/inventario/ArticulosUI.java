@@ -30,9 +30,9 @@ public class ArticulosUI implements ViewInterface{
                    observacionesLabel = new JLabel("Observaciones: ",JLabel.TRAILING);
     
     // Ahora debemos crear los campos de texto y listas necesarias.
-    private JTextField articuloField = new JTextField(40),
-                       cantidadField = new JTextField(5),
-                       precioField   = new JTextField(5);
+    private JTextField articuloField = new JTextField(20),
+                       cantidadField = new JTextField(20),
+                       precioField   = new JTextField(20);
     private JComboBox  almacenField  = new JComboBox(new String[]{
         "Guadalajara",
         "Zapopan",
@@ -88,7 +88,19 @@ public class ArticulosUI implements ViewInterface{
             @Override
             public void mouseClicked(MouseEvent e){        
                 
-                // Primero verifiquemos que se haya escrito algún articulo    
+               save();
+                                                        
+            }
+            
+        });
+                
+        return articulos;
+        
+        
+    }
+    
+    public void save(){
+         // Primero verifiquemos que se haya escrito algún articulo    
                 if(articuloField.getText() == null || articuloField.getText().trim().equals( "" )){
                     JOptionPane.showMessageDialog(null, "Por favor ingresa un articulo", "Error",
                     JOptionPane.ERROR_MESSAGE);
@@ -118,14 +130,6 @@ public class ArticulosUI implements ViewInterface{
                      spinnerField.getValue(),
                      observacionesField.getText()
                  });
-                                                        
-            }
-            
-        });
-        
-        
-        return articulos;
-        
     }
     
  /**
@@ -150,7 +154,7 @@ public class ArticulosUI implements ViewInterface{
         
         JTable table = new JTable(model);               
         JScrollPane pane = new JScrollPane(table);
-                    pane.setPreferredSize(new Dimension(5000,150));
+                    pane.setPreferredSize(new Dimension(5000,350));
         
         return pane;
     
@@ -174,7 +178,7 @@ public class ArticulosUI implements ViewInterface{
         form.setLayout(new GridBagLayout());
         
         int col_a_gridwith = 1;
-        int col_b_gridwith = 4;
+        int col_b_gridwith = 1;
         
         c.gridx = 0;
         c.gridy = 0;
@@ -184,44 +188,44 @@ public class ArticulosUI implements ViewInterface{
         c.gridy = 0;
         c.gridwidth = col_b_gridwith;
         form.add(articuloField,c);
-        c.gridx = 0;
-        c.gridy = 1;
+        c.gridx = 2;
+        c.gridy = 0;
         c.gridwidth = col_a_gridwith;
         form.add(almacenLabel,c);
-        c.gridx = 1;
-        c.gridy = 1;
+        c.gridx = 3;
+        c.gridy = 0;
         c.gridwidth = col_b_gridwith;
         form.add(almacenField,c);
         c.gridx = 0;
-        c.gridy = 2;
+        c.gridy = 1;
         c.gridwidth = col_a_gridwith;
         form.add(cantidadLabel,c);
         c.gridx = 1;
-        c.gridy = 2;
+        c.gridy = 1;
         c.gridwidth = col_b_gridwith;
         form.add(cantidadField,c);
-        c.gridx = 0;
-        c.gridy = 3;
+        c.gridx = 2;
+        c.gridy = 1;
         c.gridwidth = col_a_gridwith;
         form.add(precioLabel,c);
-        c.gridx = 1;
-        c.gridy = 3;
+        c.gridx = 3;
+        c.gridy = 1;
         c.gridwidth = col_b_gridwith;
         form.add(precioField,c);
         c.gridx = 0;
-        c.gridy = 4;
+        c.gridy = 2;
         c.gridwidth = col_a_gridwith;
         form.add(monedaLabel,c);
         c.gridx = 1;
-        c.gridy = 4;
+        c.gridy = 2;
         c.gridwidth = col_b_gridwith;
         form.add(monedaField,c);
-        c.gridx = 0;
-        c.gridy = 5;
+        c.gridx = 2;
+        c.gridy = 2;
         c.gridwidth = col_a_gridwith;
         form.add(spinnerLabel,c);
-        c.gridx = 1;
-        c.gridy = 5;
+        c.gridx = 3;
+        c.gridy = 2;
         c.gridwidth = col_b_gridwith;
         spinnerField.setModel(new javax.swing.SpinnerListModel(new String[] {
             "Bombas Hidraulicas de Occidente S.A. de C.V.",
@@ -232,21 +236,21 @@ public class ArticulosUI implements ViewInterface{
         }));
         form.add(spinnerField,c);
         c.gridx = 0;
-        c.gridy = 6;
+        c.gridy = 3;
         c.gridwidth = col_a_gridwith;
         form.add(observacionesLabel,c);
         c.gridx = 1;
-        c.gridy = 6;
+        c.gridy = 3;
         c.ipady     = 50;
-        c.ipadx     = 800;
+        c.ipadx     = 350;
         c.gridwidth = col_b_gridwith;        
-        observacionesField.setColumns(40);
+        observacionesField.setColumns(30);
         observacionesField.setRows(10);
 
-        form.add(observacionesField,c);
+        form.add(new JScrollPane(observacionesField),c);
         
-        c.gridx = 1;
-        c.gridy = 7;
+        c.gridx = 3;
+        c.gridy = 3;
         c.gridwidth = col_b_gridwith;
         form.add(guardarBtn,c);
                 
