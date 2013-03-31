@@ -88,19 +88,7 @@ public class ArticulosUI implements ViewInterface{
             @Override
             public void mouseClicked(MouseEvent e){        
                 
-               save();
-                                                        
-            }
-            
-        });
-                
-        return articulos;
-        
-        
-    }
-    
-    public void save(){
-         // Primero verifiquemos que se haya escrito algún articulo    
+                // Primero verifiquemos que se haya escrito algún articulo    
                 if(articuloField.getText() == null || articuloField.getText().trim().equals( "" )){
                     JOptionPane.showMessageDialog(null, "Por favor ingresa un articulo", "Error",
                     JOptionPane.ERROR_MESSAGE);
@@ -130,6 +118,14 @@ public class ArticulosUI implements ViewInterface{
                      spinnerField.getValue(),
                      observacionesField.getText()
                  });
+                                                        
+            }
+            
+        });
+        
+        
+        return articulos;
+        
     }
     
  /**
