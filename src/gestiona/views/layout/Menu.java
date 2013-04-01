@@ -19,6 +19,7 @@ import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.awt.event.KeyEvent;
 import java.io.File;
+import java.util.HashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JFileChooser;
@@ -36,7 +37,7 @@ import javax.swing.SwingConstants;
 public class Menu implements ViewInterface{
     
     @Override
-    public JPanel init(){
+    public JPanel init(HashMap data){
         throw new UnsupportedOperationException("Not supported yet.");
     }
    /**

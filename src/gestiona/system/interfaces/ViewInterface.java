@@ -3,6 +3,7 @@
  * and open the template in the editor.
  */
 package gestiona.system.interfaces;
+import java.util.HashMap;
 import javax.swing.JPanel;
 
 /**
@@ -11,6 +12,6 @@ import javax.swing.JPanel;
  */
 public interface ViewInterface {
     
-    public JPanel init();
+    public JPanel init(HashMap data);
     
 }

@@ -9,6 +9,12 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
+import java.sql.SQLException;
+import java.util.HashMap;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.JSpinner;
@@ -56,7 +62,7 @@ public class ArticulosUI implements ViewInterface{
     * Es hora de iniciar con la carga de la vista
     **/
     @Override
-    public JPanel init(){        
+    public JPanel init(HashMap data){        
         // Creamos el panel que va a contener nuestra vista
         // y le asignamos un BorderLayout
         JPanel
@@ -101,7 +107,7 @@ public class ArticulosUI implements ViewInterface{
         // Por ultimo agregamos el contenido a nuestro panel
         articulos.add(this.createForm(),BorderLayout.CENTER);
         articulos.add(this.createHelpBar(),BorderLayout.LINE_END);
-        articulos.add(this.createTable(),BorderLayout.SOUTH);  
+        articulos.add(this.createTable((ResultSet) data.get("articulos")),BorderLayout.SOUTH);  
         
         return articulos;
         
@@ -217,29 +223,44 @@ public class ArticulosUI implements ViewInterface{
     * Este metodo crea la tabla en donde mostraremos
     * los datos que el usuario haya ingresado
     **/
-    public JScrollPane createTable(){
+    public JScrollPane createTable(ResultSet articulos){
+        JScrollPane pane = null;
+            // Primero definimos el arreglo con los titulos de nuestra tabla
+            String[] col = {
+                "Articulo",
+                "Almacen",
+                "Cantidad",
+                "Precio",
+                "Moneda",
+                "Proveedor",
+                "Observaciones"
+            };
+            // Ahora definimos el objeto que contendra los datos de usuario
+            Object[][] data = {};
+            // Debemos crear una instancia de modelo de tabla
+            model = new DefaultTableModel(data,col);
+         try {  
+            ResultSetMetaData meta = articulos.getMetaData();
+            int numberOfColumns = meta.getColumnCount();
+            while (articulos.next()){
+                Object [] rowData = new Object[numberOfColumns];
+                for (int i = 0; i < rowData.length; ++i) {
+                    rowData[i] = articulos.getObject(i+1);
+                }
+                model.addRow(rowData);
+            }
+
+            
+            // Ahora creamos nuestra tabla
+            JTable table = new JTable(model);               
+            pane = new JScrollPane(table);
+            pane.setPreferredSize(new Dimension(5000,350));
+            
+            
+        } catch (SQLException ex) {
+            Logger.getLogger(ArticulosUI.class.getName()).log(Level.SEVERE, null, ex);
+        }
     
-        // Primero definimos el arreglo con los titulos de nuestra tabla
-        String[] col = {
-            "Articulo",
-            "Almacen",
-            "Cantidad",
-            "Precio",
-            "Moneda",
-            "Proveedor",
-            "Observaciones"
-        };
-        // Ahora definimos el objeto que contendra los datos de usuario
-        Object[][] data = {};
-        // Debemos crear una instancia de modelo de tabla
-        model = new DefaultTableModel(data,col);
-        // Ahora creamos nuestra tabla
-        JTable table = new JTable(model);               
-        JScrollPane pane = new JScrollPane(table);
-                    pane.setPreferredSize(new Dimension(5000,350));
-        
         return pane;
-    
-    
     }
 }

@@ -31,6 +31,7 @@ public class Load {
     
     public static HashMap CONTROLLERS_CONTAINER = new HashMap();
     public static HashMap VIEWS_CONTAINER       = new HashMap();
+    public static HashMap LIBRARIES_CONTAINER   = new HashMap();
     public static JPanel  CURRENT_VIEW;
     
     public static void controller(String controllerName){
@@ -63,6 +64,40 @@ public class Load {
         }    
     }  
     
+    public static LibraryInterface library(String libraryName){
+        
+        ClassLoader classLoader = Load.class.getClassLoader();
+        
+        LibraryInterface instancia = null;
+      
+        if(LIBRARIES_CONTAINER.containsKey(libraryName)){
+            System.out.print(gestiona.config.Settings.SOFTWARE_NAME+": Cargando libreria '"+libraryName+"' desde cache\n");
+            instancia = (LibraryInterface) LIBRARIES_CONTAINER.get(libraryName);     
+           
+        }else{
+            System.out.print(gestiona.config.Settings.SOFTWARE_NAME+": Cargando libreria '"+libraryName+"' por primera vez\n");
+            Class aClass;
+            try {
+                aClass = classLoader.loadClass("gestiona.system.libraries."+libraryName);
+                
+                try {
+                    instancia = (LibraryInterface) aClass.newInstance();
+                    instancia.init();
+                    LIBRARIES_CONTAINER.put(libraryName,instancia);
+                    return instancia;
+                } catch (InstantiationException ex) {
+                    Logger.getLogger(Load.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (IllegalAccessException ex) {
+                    Logger.getLogger(Load.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            } catch (ClassNotFoundException ex) {
+                Logger.getLogger(Load.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        
+       return instancia;
+    }  
+    
     public static void layout(HashMap sections){
         
         Iterator it = sections.entrySet().iterator();
@@ -78,7 +113,7 @@ public class Load {
         
     };
     
-    public static JPanel view(String viewName, boolean bringUp) {
+    public static JPanel view(String viewName, boolean bringUp, HashMap data) {
         
         ClassLoader classLoader = Load.class.getClassLoader();
         
@@ -87,7 +122,7 @@ public class Load {
         if(VIEWS_CONTAINER.containsKey(viewName)){
             System.out.print(gestiona.config.Settings.SOFTWARE_NAME+": Cargando vista '"+viewName+"' desde cache\n");
             instancia = (ViewInterface) VIEWS_CONTAINER.get(viewName);
-            CURRENT_VIEW = (JPanel) instancia.init();
+            CURRENT_VIEW = (JPanel) instancia.init(data);
         }else{
             System.out.print(gestiona.config.Settings.SOFTWARE_NAME+": Cargando vista '"+viewName+"' por primera vez\n");
             Class aClass;
@@ -97,7 +132,7 @@ public class Load {
                 try {
                     instancia = (ViewInterface) aClass.newInstance();
                     VIEWS_CONTAINER.put(viewName,instancia);
-                    CURRENT_VIEW = (JPanel) instancia.init();
+                    CURRENT_VIEW = (JPanel) instancia.init(data);
                 } catch (InstantiationException ex) {
                     Logger.getLogger(Load.class.getName()).log(Level.SEVERE, null, ex);
                 } catch (IllegalAccessException ex) {
@@ -117,6 +152,14 @@ public class Load {
     }
     
     public static JPanel view(String viewName){
-        return Load.view(viewName, true);
+        return Load.view(viewName, true, null);
+    }
+    
+    public static JPanel view(String viewName, boolean bool){
+        return Load.view(viewName, bool, null);
+    }
+    
+    public static JPanel view(String viewName, HashMap data){
+        return Load.view(viewName, true, data);
     }
 }

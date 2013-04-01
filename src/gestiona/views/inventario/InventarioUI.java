@@ -8,6 +8,7 @@ import java.awt.event.MouseEvent;
 import javax.swing.*;
 
 import gestiona.system.core.Load;
+import java.util.HashMap;
 /**
  * @author Jonathan Casarrubias
  **/
@@ -30,7 +31,7 @@ public class InventarioUI implements ViewInterface {
     * Crea el menu a la izquierda y manda llamar 
     **/
     @Override
-    public JPanel init(){
+    public JPanel init(HashMap data){
         
         // Lets first create our JPanel
         inventarioPanel = new JPanel(new BorderLayout());

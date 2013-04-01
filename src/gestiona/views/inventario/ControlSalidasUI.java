@@ -6,6 +6,7 @@ package gestiona.views.inventario;
 
 import gestiona.system.interfaces.ViewInterface;
 import java.awt.Dimension;
+import java.util.HashMap;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
@@ -16,7 +17,7 @@ import javax.swing.JPanel;
 public class ControlSalidasUI implements ViewInterface {
     
     @Override
-    public JPanel init(){
+    public JPanel init(HashMap data){
         
         JPanel
                 

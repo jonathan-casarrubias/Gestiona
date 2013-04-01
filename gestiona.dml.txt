@@ -1,0 +1,2 @@
+INSERT INTO `gestiona`.`articulos` (articulo,almacen,cantidad,precio,moneda,proveedor,observaciones) VALUES ('Fluxometro Digital','Guadalajara',5,790,'MX','Steren','Ninguna');
+INSERT INTO `gestiona`.`articulos` (articulo,almacen,cantidad,precio,moneda,proveedor,observaciones) VALUES ('Bomba de Agua 1000 l/h','Guadalajara',5,550,'MX','Bombas Hidraulicas de Occidente S.A de C.V','Ninguna');

@@ -7,6 +7,7 @@ package gestiona.views.layout;
 import gestiona.system.interfaces.ViewInterface;
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.util.HashMap;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JSeparator;
@@ -19,7 +20,7 @@ import javax.swing.SwingConstants;
 public class Footer implements ViewInterface {
     
     @Override
-    public JPanel init(){
+    public JPanel init(HashMap data){
         
         // Lets create our panel for our footer
         JPanel

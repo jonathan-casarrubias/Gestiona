@@ -10,6 +10,6 @@ package gestiona.system.interfaces;
  */
 public interface ControllerInterface {
     
-    public void init() throws InstantiationException, IllegalAccessException, ClassNotFoundException;
+    public void init();
     
 }

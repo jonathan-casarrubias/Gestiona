@@ -1,0 +1,13 @@
+CREATE SCHEMA `gestiona` ;
+
+CREATE TABLE `gestiona`.`articulos` (
+`id` int NOT NULL AUTO_INCREMENT,
+`articulo` VARCHAR(200) NOT NULL ,
+`almacen` VARCHAR(200) NOT NULL ,
+`cantidad` int NOT NULL ,
+`precio` int NOT NULL ,
+`moneda` VARCHAR(5) NOT NULL ,
+`proveedor` VARCHAR(200) NOT NULL ,
+`observaciones` VARCHAR(200) NOT NULL ,
+PRIMARY KEY (`id`) );
+
