@@ -1,6 +1,7 @@
 package gestiona.views.inventario;
 // importemos nuestras librerias
 import gestiona.system.interfaces.ViewInterface;
+import gestiona.controllers.InventarioController;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -13,6 +14,7 @@ import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.util.HashMap;
+import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.*;
@@ -62,14 +64,17 @@ public class ArticulosUI implements ViewInterface{
     * Es hora de iniciar con la carga de la vista
     **/
     @Override
-    public JPanel init(HashMap data){        
+    public JPanel init(HashMap data){           
+        
         // Creamos el panel que va a contener nuestra vista
         // y le asignamos un BorderLayout
         JPanel
                 
         articulos = new JPanel();
         articulos.setBackground(Color.decode(gestiona.config.Settings.BACKGROUND_COLOR));
-        articulos.setLayout(new BorderLayout());        
+        articulos.setLayout(new BorderLayout());     
+     
+        
         // Ahora creamos un escucha para nuestro botón de guardar
         guardarBtn.addMouseListener(new MouseAdapter() {
             
@@ -92,7 +97,21 @@ public class ArticulosUI implements ViewInterface{
                     JOptionPane.showMessageDialog(null, "Por favor ingresa un precio", "Error",
                     JOptionPane.ERROR_MESSAGE);
                     return;
-                }                          
+                }        
+                
+                HashMap insert = new HashMap();
+                        insert.put("articulo",articuloField.getText());
+                        insert.put("almacen",almacenField.getSelectedItem());
+                        insert.put("cantidad",cantidadField.getText());
+                        insert.put("precio",precioField.getText());
+                        insert.put("moneda",monedaField.getSelectedItem());
+                        insert.put("proveedor",proveedoresField.getValue());
+                        insert.put("observaciones",observacionesField.getText());
+                
+                
+                gestiona.controllers.InventarioController.DB.insert("articulos",insert);
+             
+                
                 model.insertRow(0,new Object[]{
                      articuloField.getText(),
                      almacenField.getSelectedItem(),
@@ -104,10 +123,15 @@ public class ArticulosUI implements ViewInterface{
                  });                                 
             }
         });
+        
+        
+        ResultSet articulosRS = (ResultSet) data.get("articulos");
+ 
+        
         // Por ultimo agregamos el contenido a nuestro panel
         articulos.add(this.createForm(),BorderLayout.CENTER);
         articulos.add(this.createHelpBar(),BorderLayout.LINE_END);
-        articulos.add(this.createTable((ResultSet) data.get("articulos")),BorderLayout.SOUTH);  
+        articulos.add(this.createTable(articulosRS),BorderLayout.SOUTH);  
         
         return articulos;
         

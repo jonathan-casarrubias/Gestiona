@@ -9,6 +9,9 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
@@ -16,7 +19,7 @@ import javax.swing.JOptionPane;
  *
  * @author Jonathan Casarrubias
  */
-public class DB implements LibraryInterface{
+public class DB {
     
     private String user,pass,server,database,
                    select = "*",
@@ -26,6 +29,7 @@ public class DB implements LibraryInterface{
                    query  = "";
     
     private Connection conexion;
+    private ResultSet CURRENT_RESULT;
     
     public void init(){
         
@@ -48,6 +52,45 @@ public class DB implements LibraryInterface{
         }
     }
     
+    public void insert(String table, HashMap mp){
+        
+        String fields,values;
+        
+        Iterator it = mp.entrySet().iterator();
+            
+            fields = "(";
+            values = "(";
+            while (it.hasNext()) {
+                Map.Entry pairs = (Map.Entry)it.next();
+                fields += pairs.getKey();
+                String field = (String) pairs.getValue();
+                boolean isInt = gestiona.system.helpers.Numeric.isInteger(field,20 ); 
+                values += (isInt) ? field : "'"+field+"'";
+                
+                if(it.hasNext()){
+                fields += ",";
+                values += ",";
+                }
+              
+                it.remove();
+            }
+            fields += ")";
+            values += ")";
+            
+        String insert = "INSERT INTO "+table+" "+fields+" VALUES "+values+";";
+        System.out.print(insert);
+        
+         try {
+            Statement st = conexion.createStatement();
+                      st.executeUpdate(insert);
+           
+            
+        } catch (SQLException ex) {
+            Logger.getLogger(DB.class.getName()).log(Level.SEVERE, null, ex);
+        }
+                    
+    }
+    
     public void select(String select){
         this.select = select;
     }
@@ -64,27 +107,28 @@ public class DB implements LibraryInterface{
         this.order = order;
     }
     
-    public void query(String query){
+    public String query(){
         
         if(this.query.equals("")){
-            this.query = select+" "+from+" "+where+" "+order;
+            this.query = "SELECT "+select+" FROM "+from+" "+where+" "+order;
+          
         }
+        
+        return this.query;
     }
     
     public ResultSet result(){
-        
-        ResultSet result = null;
-        
+      
         try {
             Statement st = conexion.createStatement();
-            result = st.executeQuery( this.query );
+            CURRENT_RESULT = st.executeQuery( this.query() );
             this.query = "";
-            st.close();
+            
         } catch (SQLException ex) {
             Logger.getLogger(DB.class.getName()).log(Level.SEVERE, null, ex);
         }
         
-        return result;
+        return CURRENT_RESULT;
 
     }
     

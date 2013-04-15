@@ -38,7 +38,7 @@ public class InventarioUI implements ViewInterface {
         inventarioPanel.setBackground(Color.decode(gestiona.config.Settings.BACKGROUND_COLOR));
       
         inventarioPanel.add(gestiona.views.layout.Menu.left(inventarioPanel, menuItems),BorderLayout.WEST);   
-        inventarioPanel.add(gestiona.system.core.Load.view(menuItems[1][0]),BorderLayout.CENTER);
+        inventarioPanel.add(gestiona.system.core.Load.view(menuItems[1][0],data),BorderLayout.CENTER);
         
         return inventarioPanel;
         

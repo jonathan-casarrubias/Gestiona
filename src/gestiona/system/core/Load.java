@@ -33,6 +33,7 @@ public class Load {
     public static HashMap VIEWS_CONTAINER       = new HashMap();
     public static HashMap LIBRARIES_CONTAINER   = new HashMap();
     public static JPanel  CURRENT_VIEW;
+    public static LibraryInterface CURRENT_LIBRARY;
     
     public static void controller(String controllerName){
         
@@ -67,12 +68,11 @@ public class Load {
     public static LibraryInterface library(String libraryName){
         
         ClassLoader classLoader = Load.class.getClassLoader();
-        
-        LibraryInterface instancia = null;
+       
       
         if(LIBRARIES_CONTAINER.containsKey(libraryName)){
             System.out.print(gestiona.config.Settings.SOFTWARE_NAME+": Cargando libreria '"+libraryName+"' desde cache\n");
-            instancia = (LibraryInterface) LIBRARIES_CONTAINER.get(libraryName);     
+            CURRENT_LIBRARY = (LibraryInterface) LIBRARIES_CONTAINER.get(libraryName);     
            
         }else{
             System.out.print(gestiona.config.Settings.SOFTWARE_NAME+": Cargando libreria '"+libraryName+"' por primera vez\n");
@@ -81,10 +81,9 @@ public class Load {
                 aClass = classLoader.loadClass("gestiona.system.libraries."+libraryName);
                 
                 try {
-                    instancia = (LibraryInterface) aClass.newInstance();
-                    instancia.init();
-                    LIBRARIES_CONTAINER.put(libraryName,instancia);
-                    return instancia;
+                    CURRENT_LIBRARY = (LibraryInterface) aClass.newInstance();
+                    CURRENT_LIBRARY.init();
+                    LIBRARIES_CONTAINER.put(libraryName,CURRENT_LIBRARY);
                 } catch (InstantiationException ex) {
                     Logger.getLogger(Load.class.getName()).log(Level.SEVERE, null, ex);
                 } catch (IllegalAccessException ex) {
@@ -95,7 +94,7 @@ public class Load {
             }
         }
         
-       return instancia;
+       return CURRENT_LIBRARY;
     }  
     
     public static void layout(HashMap sections){
@@ -114,6 +113,7 @@ public class Load {
     };
     
     public static JPanel view(String viewName, boolean bringUp, HashMap data) {
+  
         
         ClassLoader classLoader = Load.class.getClassLoader();
         

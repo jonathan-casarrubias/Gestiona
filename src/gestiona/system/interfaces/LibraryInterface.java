@@ -13,10 +13,5 @@ import java.sql.ResultSet;
 public interface LibraryInterface {
     
     public void init();
-    public void select(String select);
-    public void from(String from);
-    public void where(String where);
-    public void order(String order);
-    public ResultSet result();
     
 }

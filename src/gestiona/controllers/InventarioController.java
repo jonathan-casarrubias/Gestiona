@@ -7,6 +7,7 @@ package gestiona.controllers;
 import gestiona.system.core.*;
 import gestiona.system.interfaces.ControllerInterface;
 import gestiona.system.interfaces.LibraryInterface;
+import gestiona.system.libraries.DB;
 import java.awt.BorderLayout;
 import java.sql.ResultSet;
 import java.util.HashMap;
@@ -18,20 +19,22 @@ import java.util.logging.Logger;
  */
 public class InventarioController implements ControllerInterface {
 
+    public static DB DB;
+    
     @Override
     public void init(){
         
-        HashMap data = null;
+        HashMap data = new HashMap();
         
         // Lo primero que debemos hacer, es llamar nuestra libreria de base de datos
-        LibraryInterface 
+       
                 
-               db = gestiona.system.core.Load.library("DB");
-        
-               db.select("*");
-               db.from("articulos");
-               
-        data.put("articulos", db.result());
+        DB = new gestiona.system.libraries.DB();
+        DB.init();
+        DB.select("*");
+        DB.from("articulos");
+            
+        data.put("articulos", DB.result());
         
         HashMap 
                 
